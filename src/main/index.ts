@@ -2,6 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import './ipcMain'
+import './drag'
 
 function createWindow(): void {
   // Create the browser window.
@@ -17,6 +19,7 @@ function createWindow(): void {
     x: 1500,
     y: 100,
     frame: false,
+    transparent: true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -34,7 +37,7 @@ function createWindow(): void {
     return { action: 'deny' }
   })
 
-  mainWindow.webContents.openDevTools()
+  if (is.dev) mainWindow.webContents.openDevTools()
   mainWindow.setAspectRatio(1)
 
   // HMR for renderer base on electron-vite cli.
@@ -59,9 +62,6 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 
