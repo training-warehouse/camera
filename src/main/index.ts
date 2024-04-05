@@ -1,26 +1,31 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+
 import './ipcMain'
 import './drag'
+import createTray from './tray'
+import './windowSize'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 300,
-    height: 300,
+    width: 500,
+    height: 280,
+    // minWidth: 250,
+    // minHeight: 250,
+    // maxHeight: 500,
+
+    // maxWidth: 500,
     show: false,
     alwaysOnTop: true,
-    minWidth: 250,
-    minHeight: 250,
-    maxHeight: 500,
-    maxWidth: 500,
     x: 1500,
     y: 100,
     frame: false,
     transparent: true,
     autoHideMenuBar: true,
+    skipTaskbar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -38,7 +43,6 @@ function createWindow(): void {
   })
 
   if (is.dev) mainWindow.webContents.openDevTools()
-  mainWindow.setAspectRatio(1)
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
@@ -63,6 +67,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  createTray()
   createWindow()
 
   app.on('activate', function () {

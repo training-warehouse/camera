@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.liaokong.camera
 productName: camera
 directories:
   buildResources: build

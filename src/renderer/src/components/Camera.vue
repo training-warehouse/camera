@@ -4,7 +4,7 @@
     :class="{ 'rounded-full': config.rounded }"
     :style="`border:solid ${config.borderWidth} ${config.borderColor}`"
   >
-    <video class="object-cover h-full" :class="{ 'rounend-full': config.rounded }"></video>
+    <video class="object-cover w-full h-full" :class="{ 'rounend-full': config.rounded }"></video>
   </main>
 </template>
 

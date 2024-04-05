@@ -4,7 +4,7 @@ import { useConfigStore } from './stores/useConfigStore'
 
 import Camera from './components/Camera.vue'
 import Setting from './components/Setting.vue'
-import useDrag from './composables/useDrag.ts'
+import useDrag from './composables/useDrag'
 
 const { drag } = useDrag()
 
@@ -12,6 +12,15 @@ drag.run()
 const { config } = useConfigStore()
 const quit = () => {
   window.api.quit()
+}
+
+const changeRound = () => {
+  config.rounded = !config.rounded
+  if (config.rounded) {
+    window.api.setWindowSize({ aspectRatio: 1, width: 300, height: 300 })
+  } else {
+    window.api.setWindowSize({ aspectRatio: 16 / 9, width: 500, height: 280 })
+  }
 }
 </script>
 
@@ -31,7 +40,7 @@ const quit = () => {
           size="24"
           v-if="config.page === 'camera'"
           class="absolute left-1/2 -translate-x-1/2 mt-3 bottom-3 text-white opacity-80 cursor-pointer z-10 hidden group-hover:block"
-          @click="config.rounded = !config.rounded"
+          @click="changeRound"
         ></InnerShadowTopLeft>
         <camera-five
           theme="outline"
